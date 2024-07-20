@@ -15,29 +15,32 @@ class MahjongGame:
         random.shuffle(self.tiles)
         self.players = [player.Player(f"Player {i+1}") for i in range(NUM_PLAYERS)]  # Create 4 Player instances
         self.discard_pile = []
-        self.top_of_pile = self.tiles[STARTING_TOP_OF_PILE]
-        self.bottom_of_pile = self.tiles[STARTING_BOTTOM_OF_PILE]
-
-#TODO implement draw_tile() method
-    """
-    def draw_tile(self, player_index):
-        if len(self.tiles) > 14:  # Reserve some tiles for the dead wall
-            tile = self.tiles.pop()
-            self.players[player_index].add_to_hand(tile)
-        else:
-            print("No more tiles to draw!")
-    """
+        self.top_of_pile = STARTING_TOP_OF_PILE
+        self.bottom_of_pile = STARTING_BOTTOM_OF_PILE
+        self.current_player = 1  # Player 1 starts the game   
+    def draw_tile(self, current_player):
+        tile = self.tiles.pop(self.top_of_pile)
+        self.players[current_player].hand.append(tile)
+        if self.top_of_pile > self.bottom_of_pile:
+            raise Exception("No more tiles to draw!")
+        self.top_of_pile += 1
+#TODO implement check_bonus_tile
+    def check_bonus_tile(self, current_player):
+        if self.players[current_player].hand[-1].suit == "Season" or self.players[current_player].hand[-1].suit == "Flower":
+            print(f"Player {current_player} drew a bonus tile!")
+            self.players[current_player].hand.pop()
+            self.draw_tile(current_player)
     def print_all_players_hands(self):
         for i, player in enumerate(self.players):
             print(f"Player {i + 1}: {player.print_hand()}")
     def print_one_player_hand(self, player_index):
-        print(f"Player {player_index + 1}: {self.players[player_index].print_hand()}")
+        print(f"Player {player_index}'s hand: ")
+        print(self.players[player_index].print_hand())
     def deal_tiles(self):
-        for _ in range(13):  # Each player gets 13 tiles initially
-            for i in range(4):
+        for _ in range(TILES_PER_PLAYER):  # Each player gets 13 tiles initially
+            for i in range(NUM_PLAYERS):
                 self.players[i].add_to_hand(self.tiles.pop())
-    #TODO implement the shuffle_tiles() 
-
+   
     def shuffle_tiles(self):
         random.shuffle(self.tiles)
 
@@ -57,12 +60,7 @@ class MahjongGame:
 
         # Return the abbreviated tile name
         return f"{suit}{tile.rank}"
-    #TODO: Implement the show_hands method
-    """
-    def show_all_hands(self):
-        for i, player in enumerate(self.players):
-            print(f"Player {i + 1}: {player.show_hand()}
-    """
+ 
     def list_tiles(self):
         # Implementation similar to what's in board.py
         for tile in self.tiles:
@@ -78,22 +76,32 @@ class MahjongGame:
 game = MahjongGame()
 game.shuffle_tiles()
 game.deal_tiles()
-game.print_all_players_hands()
+game.print_one_player_hand(2)
+game.draw_tile(2)
+game.print_one_player_hand(2)
 #game.list_tiles()
 #game.list_abbreviate_tiles()
 #game.count_tiles()
 """
+TODO: SEE BELOW
+def check_win_condition(self, current_player):
 def game_loop(game):
     turn = 0
-    while len(game.tiles) > 14:  # Continue until no more tiles to draw
+    while len(game.tiles) <= 14:  # Continue until no more tiles to draw
         current_player = turn % 4
         print(f"Player {current_player + 1}'s turn:")
         
         game.draw_tile(current_player)
-        game.show_hands()
+        game.check_win_condition(current_player)
         
         turn += 1
 
 # Run the game loop
 game_loop(game)
+
+def main():
+    game = MahjongGame()
+    game.shuffle_tiles()
+    game.deal_tiles()
+    game_loop(game)
 """
