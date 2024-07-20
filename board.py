@@ -1,10 +1,16 @@
 class Tile:
-    def __init__(self, suit, value):
+    def __init__(self, suit, rank):
         self.suit = suit
-        self.value = value
+        self.rank = rank
+
+    def __getitem__(self, index):
+        if index == 0:
+            return self.suit
+        elif index == 1:
+            return self.rank
 
     def __repr__(self):
-        return f"{self.suit}{self.value}"
+        return f"{self.suit}{self.rank}"
 
 # Define suits
 SUITS = ['Characters', 'Bamboos', 'Dots']
@@ -34,5 +40,11 @@ def create_tiles():
     
     for season in SEASONS:
         tiles.append(Tile('Season', season))
-    
+    print("The number of generated tiles is: ", len(tiles))
     return tiles
+
+def list_tiles():
+    for tile in tiles:
+        print(tile)  # Print each tile using its __repr__ method
+
+#list_tiles()
