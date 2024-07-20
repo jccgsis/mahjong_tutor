@@ -13,10 +13,11 @@ class Player:
 		"""Remove a tile from the player's hand if it exists."""
 		if tile in self.hand:
 			self.hand.remove(tile)
-
-	def show_hand(self):
-		"""Display the tiles in the player's hand."""
-		return ', '.join(self.hand)
+			
+	def print_hand(self):
+		"""Print the contents of the player's hand."""
+		for tile in self.hand:
+			print(tile)
 
 	def update_score(self, points):
 		"""Update the player's score by a certain number of points."""

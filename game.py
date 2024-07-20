@@ -1,6 +1,6 @@
 import random
-from board import create_tiles, list_tiles
-from player import Player
+import board
+import player 
 
 # CONSTANTS
 
@@ -11,9 +11,9 @@ STARTING_BOTTOM_OF_PILE = 143
 
 class MahjongGame:
     def __init__(self):
-        self.tiles = create_tiles()
+        self.tiles = board.create_tiles()
         random.shuffle(self.tiles)
-        self.players = [Player(f"Player {i+1}") for i in range(4)]  # Create 4 Player instances
+        self.players = [player.Player(f"Player {i+1}") for i in range(NUM_PLAYERS)]  # Create 4 Player instances
         self.discard_pile = []
         self.top_of_pile = self.tiles[STARTING_TOP_OF_PILE]
         self.bottom_of_pile = self.tiles[STARTING_BOTTOM_OF_PILE]
@@ -27,11 +27,16 @@ class MahjongGame:
         else:
             print("No more tiles to draw!")
     """
+    def print_all_players_hands(self):
+        for i, player in enumerate(self.players):
+            print(f"Player {i + 1}: {player.print_hand()}")
+    def print_one_player_hand(self, player_index):
+        print(f"Player {player_index + 1}: {self.players[player_index].print_hand()}")
     def deal_tiles(self):
         for _ in range(13):  # Each player gets 13 tiles initially
             for i in range(4):
                 self.players[i].add_to_hand(self.tiles.pop())
-
+    #TODO implement the shuffle_tiles() 
 
     def shuffle_tiles(self):
         random.shuffle(self.tiles)
@@ -71,9 +76,10 @@ class MahjongGame:
        # print(len(self.tiles))
 # Create a game instance and deal tiles
 game = MahjongGame()
-game.deal_tiles()
 game.shuffle_tiles()
-game.list_tiles()
+game.deal_tiles()
+game.print_all_players_hands()
+#game.list_tiles()
 #game.list_abbreviate_tiles()
 #game.count_tiles()
 """
@@ -90,17 +96,4 @@ def game_loop(game):
 
 # Run the game loop
 game_loop(game)
-
-class Tile:
-    def __init__(self, suit, rank):
-        self.suit = suit
-        self.rank = rank
-
-    def __getitem__(self, index):
-        if index == 0:
-            return self.suit
-        elif index == 1:
-            return self.rank
-        else:
-            raise IndexError("Index out of range")
 """
