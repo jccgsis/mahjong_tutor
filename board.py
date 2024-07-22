@@ -1,5 +1,5 @@
 class Tile:
-    def __init__(self, suit, rank):
+    def __init__(self, suit=None, rank=None):
         self.suit = suit
         self.rank = rank
 
@@ -10,7 +10,7 @@ class Tile:
             return self.rank
 
     def __repr__(self):
-        return f"{self.suit}{self.rank}"
+        return f"{self.suit}{self.rank}" if self.suit and self.rank else "EmptyTile"
 
 # Define suits
 SUITS = ['Characters', 'Bamboos', 'Dots']
@@ -43,8 +43,8 @@ def create_tiles():
     print("The number of generated tiles is: ", len(tiles))
     return tiles
 
-def list_tiles():
-    for tile in tiles:
+def list_tiles(self):
+    for tile in self.tiles:
         print(tile)  # Print each tile using its __repr__ method
 
 #list_tiles()

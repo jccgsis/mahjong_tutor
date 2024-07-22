@@ -1,10 +1,12 @@
-class Player:
-	def __init__(self, name, score=0):
-		self.name = name
-		self.points = score
-		self.hand = [14]
-		self.wind = None
+from board import Tile
 
+class Player:
+	def __init__(self, player_index):
+		self.name = "Player " + str(player_index)
+		self.points = 0
+		self.hand = [Tile() for _ in range(14)]
+		self.wind = None	
+		self.isHuman = (player_index == 1)
 	def add_to_hand(self, tile):
 		"""Add a tile to the player's hand."""
 		self.hand.append(tile)
