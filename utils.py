@@ -1,26 +1,14 @@
-class Tile:
-    def __init__(self, suit=None, rank=None):
-        self.suit = suit
-        self.rank = rank
-
-    def __getitem__(self, index):
-        if index == 0:
-            return self.suit
-        elif index == 1:
-            return self.rank
-
-    def __repr__(self):
-        return f"{self.suit}{self.rank}" if self.suit and self.rank else "EmptyTile"
-
-# Define suits
-SUITS = ['Characters', 'Bamboos', 'Dots']
-WINDS = ['East', 'South', 'West', 'North']
-DRAGONS = ['Red', 'Green', 'White']
-FLOWERS = ['Plum', 'Orchid', 'Chrysanthemum', 'Bamboo']
-SEASONS = ['Spring', 'Summer', 'Autumn', 'Winter']
+from tiles import Tile
 
 # Create a full set of tiles
 def create_tiles():
+    # Define suits
+    SUITS = ['Characters', 'Bamboos', 'Dots']
+    WINDS = ['East', 'South', 'West', 'North']
+    DRAGONS = ['Red', 'Green', 'White']
+    FLOWERS = ['Plum', 'Orchid', 'Chrysanthemum', 'Bamboo']
+    SEASONS = ['Spring', 'Summer', 'Autumn', 'Winter']
+    
     tiles = []
     for suit in SUITS:
         for value in range(1, 10):
@@ -46,5 +34,3 @@ def create_tiles():
 def list_tiles(self):
     for tile in self.tiles:
         print(tile)  # Print each tile using its __repr__ method
-
-#list_tiles()
