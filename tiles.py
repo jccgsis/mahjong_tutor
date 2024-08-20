@@ -12,3 +12,12 @@ class Tile:
     def __repr__(self):
         return f"{self.suit}{self.rank}" if self.suit and self.rank else "EmptyTile"
 
+    def __lt__(self,other):
+        if self.suit != other.suit:
+            return self.suit < other.suit
+        if self.rank != other.rank:
+            return self.rank < other.rank
+        return False
+    
+    def __eq__(self, other):
+        return self.suit == other.suit and self.rank == other.rank

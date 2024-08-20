@@ -3,17 +3,20 @@ from tiles import Tile
 # Create a full set of tiles
 def create_tiles():
     # Define suits
-    SUITS = ['Characters', 'Bamboos', 'Dots']
-    WINDS = ['East', 'South', 'West', 'North']
-    DRAGONS = ['Red', 'Green', 'White']
-    FLOWERS = ['Plum', 'Orchid', 'Chrysanthemum', 'Bamboo']
-    SEASONS = ['Spring', 'Summer', 'Autumn', 'Winter']
+    SUITS = ['Characters', 'Bamboos', 'Dots'] #3 suits * 1-9 numbers * 4 tiles = 108
+    WINDS = ['East', 'South', 'West', 'North'] #4 winds * 4 tiles = 16
+    DRAGONS = ['Red', 'Green', 'White'] #3 dragons * 4 tiles = 12
+    FLOWERS = ['Plum', 'Orchid', 'Chrysanthemum', 'Bamboo'] #4 flowers = 4
+    SEASONS = ['Spring', 'Summer', 'Autumn', 'Winter'] #4 seasons = 4
     
+#example hand D1, D1, D1, D2, D3, etc.'''
+#discard pile D1, D4, D4, D4i am g
+
     tiles = []
     for suit in SUITS:
         for value in range(1, 10):
             for _ in range(4):  # Each tile appears 4 times
-                tiles.append(Tile(suit, value))
+                tiles.append(Tile(suit, str(value)))
     
     for wind in WINDS:
         for _ in range(4):
@@ -65,7 +68,12 @@ def abbreviate_tile_name(self, tile):
 def list_abbreviate_tiles(self):
     for tile in self.tiles:
         print(self.abbreviate_tile_name(tile))
-
+'''
 #TODO sort hand by melds
 
 def sort_hand(self):
+
+#TODO isValidMeld()
+
+def isValidMeld()
+'''

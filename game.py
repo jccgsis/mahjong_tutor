@@ -21,7 +21,8 @@ class MahjongGame:
     def deal_tiles(self, players):
         for _ in range(13):  # Each player gets 13 tiles initially
             for i in range(4):
-                players[i].add_to_hand(self.tiles.pop())
+                players[i].draw_tile(self)
+
    
     def shuffle_tiles(self):
         random.shuffle(self.tiles)
@@ -66,4 +67,21 @@ def main():
     game.shuffle_tiles()
     game.deal_tiles()
     game_loop(game)
+"""
+
+"""
+Interruption Priority Order: Win > Pung (any player's turn end) > Chow (preceeding player's turn end)
+
+Game Loop Psuedocode:
+While(!gameover){
+    TurnLoop
+    if interruption:
+        interrupting player's turn
+    
+}
+Turn Loop Pseudocode:
+    Draw tile
+    Discard tile
+    Next player turn
+
 """

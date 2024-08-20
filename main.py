@@ -1,5 +1,5 @@
 from game import MahjongGame
-from utils import list_tiles, create_tiles, print_one_player_hand
+from utils import list_tiles, create_tiles
 from tiles import Tile
 from player import Player
 
@@ -12,12 +12,11 @@ def main():
     game = MahjongGame(create_tiles())
     game.shuffle_tiles()
     game.deal_tiles(players)
-    for player in players:
-        print(player)
-        player.check_bonus_tile()
-        while len(player.hand) < 13:
-            player.draw_tile_from_back(game)
-        print(player)
+    while(True):
+        for player in players:
+            player.draw_tile(game)
+            player.discard_tile(game)
+        print("pause")
     '''
     game.list_tiles()
     game.list_abbreviate_tiles()
