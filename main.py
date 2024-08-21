@@ -16,6 +16,7 @@ def main():
         for player in players:
             player.draw_tile(game)
             player.discard_tile(game)
+            player.categorise_hand()
         print("pause")
     '''
     game.list_tiles()

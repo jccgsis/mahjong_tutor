@@ -1,5 +1,5 @@
 from tiles import Tile
-
+from utils import *
 
 class Player:
     def __init__(self, player_index):
@@ -9,7 +9,32 @@ class Player:
         self.bonus_tiles = []
         self.player_index = player_index
         self.isHuman = player_index == 1
+        self.meld_array = []
 
+    def categorise_hand(self):
+        meld_bools_array = []
+        for i in range(len(self.hand)-3):
+            meld_bools_array.append(is_valid_pung(self.hand[i], self.hand[i+1], self.hand[i+2]))
+        for i, value in enumerate(meld_bools_array):
+            if (value == True):
+                meld = [self.hand[i], self.hand[i+1], self.hand[i+2]]
+                self.meld_array.append(meld)
+        for meld in self.meld_array:
+            for tile in meld:
+                if tile in self.hand:
+                    self.hand.remove(tile)
+        meld_bools_array = []
+        for i in range(len(self.hand)-3):
+            meld_bools_array.append(is_valid_chow(self.hand[i], self.hand[i+1], self.hand[i+2]))
+        for i, value in enumerate(meld_bools_array):
+            if (value == True):
+                meld = [self.hand[i], self.hand[i+1], self.hand[i+2]]
+                self.meld_array.append(meld)
+        for meld in self.meld_array:
+            for tile in meld:
+                if tile in self.hand:
+                    self.hand.remove(tile)
+        print(self.meld_array, self.hand)
 #completed
     def draw_tile(self, game):
         if len(game.tiles) == 0:
@@ -69,10 +94,11 @@ class Player:
 
     def print_vertical_hand(self):
         count = 0
-        for row in range(7):
+        for row in range(len(self.hand)//2):
             print(count+1, self.hand[count], "\t\t", count+2, self.hand[count+1])
             count += 2
-
+        if len(self.hand) % 2 == 1:
+            print(count+1, self.hand[-1])
 #TODO player do_turn function implement
 '''
 draw tile
@@ -81,11 +107,4 @@ discard tile
 
 '''
 
-if __name__ == "__main__":
-    player = Player(1)
-    print(player)
-    tile = Tile("Characters", 1)
-    player.add_to_hand(tile)
-    player.print_hand()
-    player.update_score(10)
-    print(player)
+    
