@@ -1,6 +1,7 @@
 import random
 import player 
 import meld
+from collections import defaultdict
 from tiles import Tile
 from flask import Flask
 from utils import create_tiles
@@ -17,6 +18,8 @@ class MahjongGame:
         self.remaining_tiles = len(tiles)
         self.discard_pile = []
         self.current_player = 1  # Player 1 starts the game
+        self.discard_dict = defaultdict(int)
+       
     
     def deal_tiles(self, players):
         for _ in range(13):  # Each player gets 13 tiles initially

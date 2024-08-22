@@ -70,9 +70,6 @@ def list_abbreviate_tiles(self):
     for tile in self.tiles:
         print(self.abbreviate_tile_name(tile))
 
-
-#TODO is_valid_meld() run 4 times over an array of 4 melds
-
 def is_valid_pair(tile1, tile2):
     if(tile1 == tile2):
         return True
