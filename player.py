@@ -113,7 +113,7 @@ class Player:
         else:
             self.hand.append(drawn_tile)
         self.hand = sorted(self.hand)
-        print(f"Player {self.player_index} drew {drawn_tile}.")
+        print(f"Player {self.player_index} drew {drawn_tile}. {self.print_tile_emoji(drawn_tile)}")
 #[[Bamboos4, Bamboos5, Bamboos6]] [Bamboos2, Bamboos7, Bamboos8, Characters3, Characters5, Characters7, Characters7, Dots3, Dots8, DragonWhite]
     def draw_tile_from_back(self, game):
         if len(game.tiles) == 0:
@@ -136,12 +136,22 @@ class Player:
 
     def discard_tile(self, game):
         self.print_vertical_hand()
-        tile_index = int(input("Which tile would you like to discard?:")) - 1
-        tile = self.hand.pop(tile_index)
-        game.discard_pile.append((tile, self.player_index))
-        game.discard_dict[tile] += 1
 
-        print(f"Player {self.player_index} discarded {tile}")
+        while True:
+                try:
+                    tile_index = int(input("Which tile would you like to discard?:")) - 1
+                    if 0 <= tile_index < len(self.hand):
+                        discarded_tile = self.hand[tile_index]
+                        game.discard_pile.append((self.hand[tile_index], self.player_index))
+                        game.discard_dict[self.hand[tile_index]] += 1
+                        self.hand.remove(self.hand[tile_index])
+                        break
+                    else:
+                        print(f"Invalid input. Please enter a tile index number between 1 and {len(self.hand)}.")
+                except ValueError:
+                    print("Invalid input. Please enter a valid integer.")
+
+        print(f"Player {self.player_index} discarded {discarded_tile}")
 
     def check_bonus_tile(self, game, tile):
         if tile.suit == "Flower" or tile.suit == "Season":
@@ -213,13 +223,12 @@ class Player:
     def print_vertical_hand(self):
         count = 0
         for row in range(len(self.hand) // 2):
-            print(count + 1, self.hand[count], self.print_tile_emoji(self.hand[count]), "\t\t", count + 2, self.hand[count + 1], self.print_tile_emoji(self.hand[count +1]))
+            print(count + 1, self.hand[count], self.print_tile_emoji(self.hand[count]), "\t\t\t", count + 2, self.hand[count + 1], self.print_tile_emoji(self.hand[count +1]))
             count += 2
         if len(self.hand) % 2 == 1:
-            print(count + 1, self.hand[-1])
+            print(count + 1, self.hand[-1], self.print_tile_emoji(self.hand[-1]))
 
 
-# TODO player do_turn function implement
 """
 draw tile
 print vertical hand

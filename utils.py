@@ -96,7 +96,9 @@ def is_valid_chow(tile1, tile2, tile3):
     else:
         return False
     
-
+#TODO def can_pung(discarded_tile)
+#TODO def can_chow(discarded_tile)
+#TODO def can_win(discarded_tile)
         
     
     
