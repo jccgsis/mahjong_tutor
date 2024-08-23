@@ -18,14 +18,13 @@ def main():
             player.categorise_hand()
             player.suggest_tiles(game.discard_dict)
             player.discard_tile(game)
+            print(game.discard_pile)
             
         print("pause")
     '''
-    game.list_tiles()
-    game.list_abbreviate_tiles()
-    game.count_tiles()
-    game.check_win_condition(2)
-    #game.game_loop()
+    #TODO Tiles to discard prioritised  
+    #TODO interrupt()
+    #TODO Game Logic: Player actions: discard, Interrupt[Win, Pung, Chow]
     '''
 
 if __name__ == "__main__":
