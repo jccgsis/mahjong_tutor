@@ -14,13 +14,40 @@ class Player:
         self.hasWon = False
         self.suggest_tiles_array = [] #either pung first and then chow [Bamboos9, Dots 5, WindWest, Bamboos5, Bamboos8, Dots2, Dots6 ]
         self.revealed_hand = [] #everythign here has to be added to discard_dict
-    # TODO canInterrupt()
+        self.possible_pungs_array = []
+        self.possible_chows_array = []
+    # TODO canInterrupt()    
+     # Below are win cases: 
+    #[3 completed melds] [D8 D8 B2 B2]
+    #[4 completed melds] [B2]
+    def can_win(self, tile):
+        if len(self.meld_array) == 4 and self.hand[0] == tile:
+            return True
+        elif len(self.meld_array) == 3 and self.hand[0] == self.hand[1] and self.hand[2] == self.hand[3] and (tile == self.hand[0] or tile == self.hand[2]):
+            return True
+        return False
+
+    def can_pung(self, discarded_tile):
+        for tile in self.hand:
+            if self.hand.count(tile) == 2 and tile == discarded_tile:
+                return True
+        return False
+        
+    def can_chow(self, tile):
+        if tile in self.possible_chows_array:
+            return True
+        else:   
+            False
+
 
     def suggest_tiles(self, discard_dict):
         self.suggest_tiles_array = set()
+        self.possible_pungs_array = set()
+        self.possible_chows_array = set()
         for tile in self.hand:
             if self.hand.count(tile) == 2 and discard_dict[tile] < 2:
                 self.suggest_tiles_array.add(tile)
+                self.possible_pungs_array.add(tile)
         for i in range(len(self.hand)-1):
             if not (self.hand[i].suit in SUITS):
                 continue
@@ -29,16 +56,19 @@ class Player:
                 higher_rank = int(self.hand[i+1].rank) + 1
                 if lower_rank >= 1 and discard_dict[tile] < 3:
                     self.suggest_tiles_array.add(Tile(self.hand[i].suit, str(lower_rank)))
+                    self.possible_chows_array.add(Tile(self.hand[i].suit, str(lower_rank)))
                 if higher_rank <= 9 and discard_dict[tile] < 3:                          
                     self.suggest_tiles_array.add(Tile(self.hand[i].suit, str(higher_rank)))
+                    self.possible_chows_array.add(Tile(self.hand[i].suit, str(higher_rank)))
+
             if self.hand[i].suit == self.hand[i+1].suit and int(self.hand[i+1].rank) - int(self.hand[i].rank) == 2:
                 if  discard_dict[tile] < 3:
                     self.suggest_tiles_array.add(Tile(self.hand[i].suit, str(int(self.hand[i].rank)+1)))
+                    self.possible_chows_array.add(Tile(self.hand[i].suit, str(int(self.hand[i].rank)+1)))
         print("Look out for these tiles: ", sorted(list(self.suggest_tiles_array)))
                 
                 
-
-    #D1 D1 D1 D2 D3 []
+   
     def check_win(self):
         if len(self.meld_array) == 4 and self.hand[0]==self.hand[1]:
             self.hasWon = True
