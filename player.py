@@ -10,16 +10,36 @@ class Player:
         self.bonus_tiles = []
         self.player_index = player_index
         self.isHuman = player_index == 1
-        self.meld_array = []
+        self.meld_array = [] #
         self.hasWon = False
         self.suggest_tiles_array = [] #either pung first and then chow [Bamboos9, Dots 5, WindWest, Bamboos5, Bamboos8, Dots2, Dots6 ]
         self.revealed_hand = [] #everythign here has to be added to discard_dict
         self.possible_pungs_array = []
         self.possible_chows_array = []
-    # TODO canInterrupt()    
+        self.tiles_to_discard = []
      # Below are win cases: 
     #[3 completed melds] [D8 D8 B2 B2]
     #[4 completed melds] [B2]
+    """
+    def print_tiles_to_discard(self):
+        #single tiles of dragons+winds, then single tiles of 1-9
+        dragon_wind_list = [t for t in self.hand if t.suit in ["Dragon", "Wind"]]
+        for tile in dragon_wind_list:
+            if dragon_wind_list.count(tile) == 1:
+                self.tiles_to_discard.append(tile)
+        for tile in self.hand:
+            if tile.suit not in ["Dragon", "Wind"] and self.hand.count(tile) == 1 and self.can_chow(tile) == False:
+                self.tiles_to_discard.append(tile)
+        print("Tiles to discard: ", self.tiles_to_discard)
+
+    def (tile):
+    loop over player hand, see if possible can chow 
+    if chowable 
+        return True
+    if 
+"""
+
+
     def can_win(self, tile):
         if len(self.meld_array) == 4 and self.hand[0] == tile:
             return True
@@ -169,6 +189,7 @@ class Player:
 
         while True:
                 try:
+                    print(f"Player {self.player_index}")
                     tile_index = int(input("Which tile would you like to discard?:")) - 1
                     if 0 <= tile_index < len(self.hand):
                         discarded_tile = self.hand[tile_index]
@@ -240,7 +261,23 @@ class Player:
                 return tile_emojis[str(tile)]
             else:
                 return (f"Emoji for {tile} not found.")
+            
+    def pung(self,game):
+        pung_tile = game.discard_pile.pop()[0]
+        self.hand.append(pung_tile)
+        self.revealed_hand.append([pung_tile, pung_tile, pung_tile])
+        self.categorise_hand()
+        self.discard_tile(game)
 
+    def chow(self,game):
+        chow_tile = game.discard_pile.pop()[0]
+        self.hand.append(chow_tile)
+        old_meld_array = self.meld_array.copy()
+        self.categorise_hand()
+        for meld in self.meld_array:
+            if meld not in old_meld_array:
+                self.revealed_hand.append(meld)
+        self.discard_tile(game)
 
     # TODO but not necessary if we aren't keeping score
     def update_score(self, points):
@@ -257,6 +294,7 @@ class Player:
             count += 2
         if len(self.hand) % 2 == 1:
             print(count + 1, self.hand[-1], self.print_tile_emoji(self.hand[-1]))
+
 
 
 """
