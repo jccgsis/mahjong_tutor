@@ -19,7 +19,7 @@ class MahjongGame:
         self.discard_pile = []
         self.current_player = 1  # Player 1 starts the game
         self.discard_dict = defaultdict(int)
-       
+        self.draw_history = []
     
     def deal_tiles(self, players):
         for _ in range(13):  # Each player gets 13 tiles initially

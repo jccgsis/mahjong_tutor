@@ -39,7 +39,6 @@ def list_tiles(game):
     for tile in game.tiles:
         print(tile)  # Print each tile using its __repr__ method
 
-#TODO count_tiles()
 def count_tiles(game):
     return len(game.tiles)
 
@@ -47,7 +46,6 @@ def print_all_players_hands(players):
         for player in players:
             print(player)
 
-#TODO check functionality of abbreviatoins 
 def abbreviate_tile_name(self, tile):
         # Extract the suit from the tile object
         suit = tile.suit
@@ -95,50 +93,3 @@ def is_valid_chow(tile1, tile2, tile3):
                 return False
     else:
         return False
-    
-#TODO def can_pung(discarded_tile)
-#TODO def can_chow(discarded_tile)
-#TODO def can_win(discarded_tile)
-        
-    
-    
-'''
-#TODO sort hand by melds
-D1, D1, D1, D2, D3
-Input: starting hand array 
-# Algorithm: look for completed pungs first, then completed chows. 2 melds
-# PUt those in a finishedarray[]. Then find individual tiles and put them in a want_to_discard[]
-# then identify if remaining tiles are chow_pair() or pung_pair
-# pung_pair is isValidPair
-have an array for wanted_tiles[]
-# if chow_pair, place missing tiles in wanted_tiles
-# if pung_pair, place tile in wanted_tiles
-#each player should have an int of 4 melds and 1 pair
-
-def sort_hand(self):
-
-ACTUAL ARRAYS
-hand []
-bonus_tiles []
-
-UTIL ARRAYS
-
-related_tiles [] = related_tile_sweep(hand)
-completed_meld_array [] = 3tiles_related_sweep(related_tiles)
-wanted_tiles [] = PUNG MISSING or CHOW MISSING
-tiles_to_discard [] = !relatedTile
-
-
-#TODO is_valid_pair()
-
-def is_valid_pair():
-
-#TODO is_meld_double():
-
-D1, D1, want D1
-B7, B8, want B9
-    return D1
-
-
-#TODO print_tile_emoji
-'''

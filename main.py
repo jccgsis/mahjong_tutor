@@ -58,6 +58,7 @@ def main():
                         pung_switch = True
                         break
                 else:
+                    print(f"Player {p.player_index} punged!")
                     p.pung(game)
                     i = p.player_index
                     pung_switch = True
@@ -72,20 +73,14 @@ def main():
                         i += 1
                         break
                     else:
+                        print(f"Player {p.player_index} chowed!")
                         p.chow(game)
                         i += 1
-                        print(p.meld_array)
+                        print(f"Player {p.player_index}'s meld array is: {p.meld_array}")
         if pung_switch:
             pung_switch = False
             continue
         i += 1
-    """
-    #TODO Tiles to discard 
-    #   
-    #TODO interrupt()
-    #TODO 
-    """
-
 
 if __name__ == "__main__":
     main()
