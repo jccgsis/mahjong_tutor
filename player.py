@@ -1,5 +1,6 @@
 from tiles import Tile
 from utils import *
+import random
 
 
 class Player:
@@ -20,24 +21,30 @@ class Player:
      # Below are win cases: 
     #[3 completed melds] [D8 D8 B2 B2]
     #[4 completed melds] [B2]
-    """
+    
     def print_tiles_to_discard(self):
+        temp_tiles_to_discard = []
         #single tiles of dragons+winds, then single tiles of 1-9
         dragon_wind_list = [t for t in self.hand if t.suit in ["Dragon", "Wind"]]
         for tile in dragon_wind_list:
             if dragon_wind_list.count(tile) == 1:
-                self.tiles_to_discard.append(tile)
+                temp_tiles_to_discard.append(tile)
         for tile in self.hand:
+            if tile.suit in ["Dots", "Characters", "Bamboos"] and self.hand.count(tile) == 1:
+                possible_chows = [Tile(tile.suit, str(int(tile.rank) + 2)), Tile(tile.suit, str(int(tile.rank) + 1)), Tile(tile.suit, str(int(tile.rank) - 1)), Tile(tile.suit, str(int(tile.rank) - 2))]
+                tiles_count = 0
+                for t in possible_chows:
+                    if t in self.hand:
+                        tiles_count += 1 
+                if tiles_count == 0:        
+                    temp_tiles_to_discard.append(tile)
             if tile.suit not in ["Dragon", "Wind"] and self.hand.count(tile) == 1 and self.can_chow(tile) == False:
-                self.tiles_to_discard.append(tile)
+                temp_tiles_to_discard.append(tile)
+        self.tiles_to_discard = temp_tiles_to_discard.copy()
         print("Tiles to discard: ", self.tiles_to_discard)
 
-    def (tile):
-    loop over player hand, see if possible can chow 
-    if chowable 
-        return True
-    if 
-"""
+
+    #either same suit above or below, or same suit 2 above or below, at least one other tile 
 
 
     def can_win(self, tile):
@@ -163,6 +170,8 @@ class Player:
         else:
             self.hand.append(drawn_tile)
         self.hand = sorted(self.hand)
+        if self.is_bonus_tile(drawn_tile):
+            print(f"Player {self.player_index} drew a bonus tile: {drawn_tile}. self.print_tile_emoji(drawn_tile)")
         print(f"Player {self.player_index} drew {drawn_tile}. {self.print_tile_emoji(drawn_tile)}")
 #[[Bamboos4, Bamboos5, Bamboos6]] [Bamboos2, Bamboos7, Bamboos8, Characters3, Characters5, Characters7, Characters7, Dots3, Dots8, DragonWhite]
     def draw_tile_from_back(self, game):
@@ -267,7 +276,11 @@ class Player:
         self.hand.append(pung_tile)
         self.revealed_hand.append([pung_tile, pung_tile, pung_tile])
         self.categorise_hand()
-        self.discard_tile(game)
+        self.print_tiles_to_discard()
+        if self.isHuman:
+            self.discard_tile(game)
+        else :
+            self.discard_tile_AI(game)
 
     def chow(self,game):
         chow_tile = game.discard_pile.pop()[0]
@@ -277,7 +290,10 @@ class Player:
         for meld in self.meld_array:
             if meld not in old_meld_array:
                 self.revealed_hand.append(meld)
-        self.discard_tile(game)
+        if self.isHuman:
+            self.discard_tile(game)
+        else:
+            self.discard_tile_AI(game)
 
     # TODO but not necessary if we aren't keeping score
     def update_score(self, points):
@@ -295,6 +311,16 @@ class Player:
         if len(self.hand) % 2 == 1:
             print(count + 1, self.hand[-1], self.print_tile_emoji(self.hand[-1]))
 
+    def discard_tile_AI(self, game):
+        if len(self.tiles_to_discard) == 0:
+            random_index = random.randint(0, len(self.hand) - 1)
+            discard_tile = self.hand[random_index]
+        else:
+            discard_tile = self.tiles_to_discard[0]
+        game.discard_pile.append((discard_tile, self.player_index))
+        game.discard_dict[discard_tile] += 1
+        self.hand.remove(discard_tile)            
+        print(f"Player {self.player_index} discarded {discard_tile}")
 
 
 """
