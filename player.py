@@ -59,7 +59,12 @@ class Player:
         if self.tiles_to_discard:
             print("Tiles to discard: ", self.tiles_to_discard)
         else:
-            print("All tiles are equally viable. Prioritise discarding chow tiles as pairs may be used to win or to pung.")
+            print("All tiles are equally meldable. Prioritising discarding chow tiles as pairs may be used to win or to pung.")
+            chow_tiles_to_discard = []
+            for tile in self.hand:
+                if self.hand.count(tile) == 1:
+                    chow_tiles_to_discard.append(tile)
+            print("Tiles to discard: ", chow_tiles_to_discard)
 
     # either same suit above or below, or same suit 2 above or below, at least one other tile
 
@@ -130,9 +135,13 @@ class Player:
                     self.possible_chows_array.add(
                         Tile(self.hand[i].suit, str(int(self.hand[i].rank) + 1))
                     )
-        print("Look out for these tiles: ", sorted(list(self.suggest_tiles_array)))
+        if len(self.suggest_tiles_array) > 0:
+            print("Look out for these tiles: ", sorted(list(self.suggest_tiles_array)))
+        else:
+            print("No specific tiles to look out for.")
 
     def check_win(self):
+        print(self.hand)
         if len(self.meld_array) == 4 and self.hand[0] == self.hand[1]:
             self.hasWon = True
 
@@ -370,8 +379,15 @@ class Player:
 
     def discard_tile_AI(self, game):
         if len(self.tiles_to_discard) == 0:
-            random_index = random.randint(0, len(self.hand) - 1)
-            discard_tile = self.hand[random_index]
+            chow_tiles_to_discard = []
+            for tile in self.hand:
+                if self.hand.count(tile) == 1:
+                    chow_tiles_to_discard.append(tile)
+            if len(chow_tiles_to_discard) > 0:
+                discard_tile = chow_tiles_to_discard[-1]
+            else:
+                random_index = random.randint(0, len(self.hand) - 1)
+                discard_tile = self.hand[random_index]
         else:
             discard_tile = self.tiles_to_discard[0]
         game.discard_pile.append((discard_tile, self.player_index))

@@ -16,13 +16,37 @@ def main():
     game.shuffle_tiles()
     game.deal_tiles(players)
     i = 0
+    turn_num = 0
     gameWon = [p.hasWon for p in players]
     pung_switch = False
     while True not in gameWon:
         print("-----------------------------------------------------------")
+        print(f"Turn {turn_num+1}")
         current_player = players[i % len(players)]
         current_player.draw_tile(game)
         current_player.categorise_hand()
+        if current_player.can_win(current_player.hand[-1]):
+            print(f"Player {current_player.player_index} can win!")
+            if current_player.isHuman:
+                if input("Do you want to win? (y/n)") == "y":
+                    current_player.hasWon = True
+                    current_player.categorise_hand()
+                    print(f"Player {current_player.player_index} has won!")
+                    print(current_player.meld_array)
+                    print(current_player.hand)
+                    sys.exit()
+            else:
+                current_player.hasWon = True
+                current_player.categorise_hand()
+                print(f"Player {current_player.player_index} has won!")
+                print(current_player.meld_array)
+                print(current_player.hand)
+                sys.exit()
+        if len(current_player.meld_array) >= 3:
+            print(f"Player {current_player.player_index} is close to winning:")
+            print(current_player.meld_array)
+            print(current_player.hand)
+            print(current_player.tiles_to_discard)
         if current_player.isHuman:
             current_player.suggest_tiles(game.discard_dict)
             current_player.print_tiles_to_discard()
@@ -31,6 +55,7 @@ def main():
         else:
             current_player.discard_tile_AI(game)
         for p in players:
+            #TODO self draw winning tile 
             if len(game.discard_pile) > 0 and p.can_win(game.discard_pile[-1][0]):
                 print(f"Player {p.player_index} can win!")
                 if p.isHuman:
@@ -40,6 +65,7 @@ def main():
                         p.categorise_hand()
                         print(f"Player {p.player_index} has won!")
                         print(p.meld_array)
+                        print(p.hand)
                         sys.exit()
                 else:
                     p.hasWon = True
@@ -47,6 +73,7 @@ def main():
                     p.categorise_hand()
                     print(f"Player {p.player_index} has won!")
                     print(p.meld_array)
+                    print(p.hand)
                     sys.exit()
         for p in players:
             if len(game.discard_pile) > 0 and p.can_pung(game.discard_pile[-1][0]):
@@ -81,6 +108,7 @@ def main():
             pung_switch = False
             continue
         i += 1
+        turn_num += 1
 
 if __name__ == "__main__":
     main()
