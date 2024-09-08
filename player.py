@@ -18,8 +18,10 @@ class Player:
         )  # either pung first and then chow [Bamboos9, Dots 5, WindWest, Bamboos5, Bamboos8, Dots2, Dots6 ]
         self.revealed_hand = []  # everythign here has to be added to discard_dict
         self.possible_pungs_array = []
-        self.possible_chows_array = []
         self.tiles_to_discard = []
+        self.possible_chows_set = set()
+
+
 
     # Below are win cases:
     # [3 completed melds] [D8 D8 B2 B2]
@@ -87,19 +89,37 @@ class Player:
         return False
 
     def can_chow(self, tile):
-        if tile in self.possible_chows_array:
-            return True
+        if tile in self.possible_chows_set:
+            for current_tile in self.hand:
+                if current_tile.suit not in SUITS:
+                    continue
+                meld_temp_array = [current_tile]
+                find_tile = Tile(current_tile.suit, str(int(current_tile.rank) + 1))
+                if find_tile in self.hand:
+                    meld_temp_array.append(find_tile)
+                if len(meld_temp_array) == 2:
+                    find_last_tile = Tile(
+                        current_tile.suit, str(int(current_tile.rank) + 2)
+                    )
+                    if find_last_tile in self.hand:
+                        meld_temp_array.append(find_last_tile)
+                if len(meld_temp_array) == 3:
+                    self.meld_array.append(meld_temp_array)
+                    self.hand.remove(current_tile)
+                    self.hand.remove(find_tile)
+                    self.hand.remove(find_last_tile)
+                    return True
         else:
             False
 
     def suggest_tiles(self, discard_dict):
         self.suggest_tiles_array = set()
-        self.possible_pungs_array = set()
-        self.possible_chows_array = set()
+        self.possible_pungs_set = set()
         for tile in self.hand:
             if self.hand.count(tile) == 2 and discard_dict[tile] < 2:
                 self.suggest_tiles_array.add(tile)
-                self.possible_pungs_array.add(tile)
+                self.possible_pungs_set.add(tile)
+                self.possible_pungs_array.append(tile)
         for i in range(len(self.hand) - 1):
             if not (self.hand[i].suit in SUITS):
                 continue
@@ -113,14 +133,14 @@ class Player:
                     self.suggest_tiles_array.add(
                         Tile(self.hand[i].suit, str(lower_rank))
                     )
-                    self.possible_chows_array.add(
+                    self.possible_chows_set.add(
                         Tile(self.hand[i].suit, str(lower_rank))
                     )
                 if higher_rank <= 9 and discard_dict[tile] < 3:
                     self.suggest_tiles_array.add(
                         Tile(self.hand[i].suit, str(higher_rank))
                     )
-                    self.possible_chows_array.add(
+                    self.possible_chows_set.add(
                         Tile(self.hand[i].suit, str(higher_rank))
                     )
 
@@ -132,13 +152,22 @@ class Player:
                     self.suggest_tiles_array.add(
                         Tile(self.hand[i].suit, str(int(self.hand[i].rank) + 1))
                     )
-                    self.possible_chows_array.add(
+                    self.possible_chows_set.add(
                         Tile(self.hand[i].suit, str(int(self.hand[i].rank) + 1))
                     )
-        if len(self.suggest_tiles_array) > 0:
-            print("Look out for these tiles: ", sorted(list(self.suggest_tiles_array)))
+        for tile in self.possible_chows_set:
+            if tile not in self.possible_chows_set:
+                self.possible_chows_set.append(tile)
+        if self.isHuman:
+            if len(self.suggest_tiles_array) > 0:
+                print(f"This is possible chows set ",sorted(self.possible_chows_set))
+                print("Look out for these tiles: ", sorted(list(self.suggest_tiles_array)))
+            else:
+                print("No specific tiles to look out for.")
         else:
-            print("No specific tiles to look out for.")
+            print(f"This is possible chows set ",self.possible_chows_set)
+            print(self.hand)
+
 
     def check_win(self):
         print(self.hand)
@@ -186,6 +215,12 @@ class Player:
                 self.hand.remove(current_tile)
                 self.hand.remove(find_tile)
                 self.hand.remove(find_last_tile)
+                if current_tile in self.possible_chows_set:
+                    self.possible_chows_set.remove(current_tile)
+                if find_tile in self.possible_chows_set:
+                    self.possible_chows_set.remove(find_tile)
+                if find_last_tile in self.possible_chows_set:
+                    self.possible_chows_set.remove(find_last_tile)
         # print(len(self.meld_array) * 3)
         # print(len(self.hand))
 
@@ -223,7 +258,7 @@ class Player:
             print(f"Player {self.player_index} drew a tile: {drawn_tile}, {self.print_tile_emoji(drawn_tile)}")
         if self.is_bonus_tile(drawn_tile):
             print(
-                f"Player {self.player_index} drew a bonus tile: {drawn_tile}. {self.print_tile_emoji(drawn_tile)}"
+                f"Player {self.player_index} drew a bonus tile: {drawn_tile}. {self.print_tile_emoji(drawn_tile)} Draw a tile from the back of the deck!"
             )
 
     # [[Bamboos4, Bamboos5, Bamboos6]] [Bamboos2, Bamboos7, Bamboos8, Characters3, Characters5, Characters7, Characters7, Dots3, Dots8, DragonWhite]

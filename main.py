@@ -19,6 +19,7 @@ def main():
     turn_num = 0
     gameWon = [p.hasWon for p in players]
     pung_switch = False
+    print("Mahjong is a game of matching tiles into melds, groupings of either three identical tiles or a consecutive sequence of three tiles of the same suit. The goal of the game is to form a complete hand of four melds and a pair, which is known as a basic winning hand. This app is designed to teach how to play Hong Kong mahjong at a level beyond basic rule comprehension. I hope you have fun and are encouraged to play the game in person! - Jack")
     while True not in gameWon:
         print("-----------------------------------------------------------")
         print(f"Turn {turn_num+1}")
@@ -26,7 +27,7 @@ def main():
         current_player.draw_tile(game)
         current_player.categorise_hand()
         if current_player.can_win(current_player.hand[-1]):
-            print(f"Player {current_player.player_index} can win!")
+            print(f"Player {current_player.player_index} can win by self-drawing!")
             if current_player.isHuman:
                 if input("Do you want to win? (y/n)") == "y":
                     current_player.hasWon = True
@@ -44,20 +45,18 @@ def main():
                 sys.exit()
         if len(current_player.meld_array) >= 3:
             print(f"Player {current_player.player_index} is close to winning:")
-            print(current_player.meld_array)
-            print(current_player.hand)
-            print(current_player.tiles_to_discard)
+            #print(current_player.revealed_hand)
         if current_player.isHuman:
             current_player.suggest_tiles(game.discard_dict)
             current_player.print_tiles_to_discard()
         if current_player.isHuman:
             current_player.discard_tile(game)
         else:
+            #current_player.suggest_tiles(game.discard_dict)
             current_player.discard_tile_AI(game)
         for p in players:
-            #TODO self draw winning tile 
             if len(game.discard_pile) > 0 and p.can_win(game.discard_pile[-1][0]):
-                print(f"Player {p.player_index} can win!")
+                print(f"Player {p.player_index} can win by punging!")
                 if p.isHuman:
                     if input("Do you want to win? (y/n)") == "y":
                         p.hand.append(game.discard_pile[-1][0])
@@ -92,18 +91,20 @@ def main():
                     print(p.meld_array) #bots
                     break
         for p in players:
-            if len(game.discard_pile) > 0 and p.can_chow(game.discard_pile[-1][0]) and current_player.player_index == p.player_index - 1:
-                print(f"Player {p.player_index} can chow!")
+            if len(game.discard_pile) > 0 and p.can_chow(game.discard_pile[-1][0]) and (current_player.player_index == p.player_index - 1 or (current_player.player_index == 4 and p.player_index == 1)):
+                print(f"Player {p.player_index} can successfully chow!")
                 if p.isHuman:
                     if input("Do you want to chow? (y/n)") == "y":
                         p.chow(game)
                         i += 1
                         break
-                    else:
-                        print(f"Player {p.player_index} chowed!")
-                        p.chow(game)
-                        i += 1
-                        print(f"Player {p.player_index}'s meld array is: {p.meld_array}")
+                else:
+                    print(f"Player {p.player_index} chowed!")
+                    print(p.hand)
+                    p.chow(game)
+                    i += 1
+                    print(f"Player {p.player_index}'s meld array is: {p.meld_array}")
+                    break
         if pung_switch:
             pung_switch = False
             continue
