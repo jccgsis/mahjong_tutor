@@ -19,7 +19,7 @@ def main():
     turn_num = 0
     gameWon = [p.hasWon for p in players]
     pung_switch = False
-    print("Mahjong is a game of matching tiles into melds, groupings of either three identical tiles or a consecutive sequence of three tiles of the same suit. The goal of the game is to form a complete hand of four melds and a pair, which is known as a basic winning hand. This app is designed to teach how to play Hong Kong mahjong at a level beyond basic rule comprehension. I hope you have fun and are encouraged to play the game in person! - Jack")
+    print(f"\nMahjong is a game of matching tiles into melds, groupings of either three identical tiles or a consecutive sequence of three tiles of the same suit. There are 144 tiles in the game, with 3 suits and 7 sets of honours tiles. Players take turns drawing tiles from the deck, or punging or chowing discarded tiles from other players. Punging resets the turn order. \n \nThe goal of the game is to form a complete hand of four melds and a pair, which is known as a basic winning hand. This app is designed to teach how to play Hong Kong mahjong at a level beyond basic rule comprehension. I hope you have fun and are encouraged to play the game in person! - Jack")
     while True not in gameWon:
         print("-----------------------------------------------------------")
         print(f"Turn {turn_num+1}")
